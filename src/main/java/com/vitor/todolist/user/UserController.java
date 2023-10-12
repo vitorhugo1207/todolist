@@ -32,6 +32,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already exist");
         }
 
+        // Cryped Password
         var passwordCrypted = BCrypt.withDefaults().hashToString(12, user.getPassword().toCharArray()); // .toCharArray() transform password to Character Array
 
         user.setPassword(passwordCrypted);
