@@ -40,8 +40,7 @@ public class TaskController {
         // Verify task start date with current date 
         var currentDate = LocalDateTime.now();
         if (currentDate.isAfter(taskModel.getStartAt()) || currentDate.isAfter(taskModel.getEndAt())) { // if actual data if bigger than Start Data or if actual data if bigger than Before Data 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("The start date / end date must be major than current date");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The start date / end date must be major than current date");
         }
 
         // Verify task end date is bigger than task start date
@@ -52,5 +51,11 @@ public class TaskController {
         var task = this.taskRepository.save(taskModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(task);
     }
-    
+
+    @GetMapping("/")
+    public List<TaskModel> list(HttpServletRequest request) {
+        var tasks = this.taskRepository.findByIdUser((UUID) request.getAttribute("idUser"));
+        return tasks;
+    }
+
 }
