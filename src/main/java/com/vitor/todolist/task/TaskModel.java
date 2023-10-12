@@ -12,17 +12,6 @@ import lombok.Data;
 @Data
 @Entity(name = "tb_tasks")
 public class TaskModel {
-    /*
-     * ID
-     * USER (ID_USER)
-     * DESCRIPTION
-     * TITLE
-     * INIT DATE
-     * END DATE
-     * PRIORITY
-     * 
-    */
-
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID id;
