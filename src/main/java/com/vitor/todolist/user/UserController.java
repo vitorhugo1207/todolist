@@ -1,6 +1,8 @@
 package com.vitor.todolist.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +21,16 @@ public class UserController {
 
     // Methods
     @PostMapping("/")
-    public User create(@RequestBody User user) {
-        // System.out.println(user.getName());
+    // ResponseEntity to return http status codes, erros, etc
+    public ResponseEntity create(@RequestBody User user) { // @RequestBody tell to spring date will be at body mensage
+        var userName = this.userRepository.findByUsername(user.getUsername());
+
+        if (userName != null) {
+            System.out.println("User already exist");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already exist");
+        }
+
         var userCreated = this.userRepository.save(user);
-        return userCreated;
+        return ResponseEntity.status(HttpStatus.CREATED).body(userCreated);
     }
 }
