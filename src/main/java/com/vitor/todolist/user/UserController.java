@@ -25,7 +25,7 @@ public class UserController {
     @PostMapping("/")
     // ResponseEntity to return http status codes, erros, etc
     public ResponseEntity create(@RequestBody UserModel user) { // @RequestBody tell to spring date will be at body mensage
-        var userName = this.userRepository.findByUsername(user.getUsername());
+        var userName = this.userRepository.findByUsername(user.getUsername()); // "findByUsername" we created at Repository
 
         if (userName != null) {
             System.out.println("User already exist");
