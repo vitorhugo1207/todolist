@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vitor.todolist.utils.Utils;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
@@ -54,8 +56,23 @@ public class TaskController {
 
     @GetMapping("/")
     public List<TaskModel> list(HttpServletRequest request) {
-        var tasks = this.taskRepository.findByIdUser((UUID) request.getAttribute("idUser"));
+        var idUser = (UUID) request.getAttribute("idUser");
+        var tasks = this.taskRepository.findByIdUser(idUser);
         return tasks;
     }
 
+    /*
+     * Suppose: http://localhost:8080/tasks/34324-6fsddf3-435fv54
+     * 34324-6fsddf3-435fv54 is id of task, so:
+     * in @PathVariable UUID idTask we'll recive this id (34324-6fsddf3-435fv54)
+     * And @PutMapping("/{idTask}")
+    */
+    @PutMapping("/{idTask}") // Receve the path, must be de same in @PathVariable UUID idTask
+    public TaskModel update(@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID idTask) {
+
+        var task = this.taskRepository.findById(idTask).orElse(null);
+        Utils.copyNonNullProperties(taskModel, task); // if not pass a properies, keeps date already in database
+
+        return this.taskRepository.save(task);
+    }
 }
