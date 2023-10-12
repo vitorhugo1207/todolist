@@ -27,7 +27,7 @@ public class TaskController {
     private TaskRepository taskRepository;
 
     public ResponseEntity responseStatusCode() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You doesn't have this task");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You don't have this task");
     }
 
     @PostMapping("/")
@@ -74,15 +74,17 @@ public class TaskController {
     @PutMapping("/{idTask}") // Receve the path, must be de same in @PathVariable UUID idTask
     public TaskModel update(@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID idTask) {
 
-        var idUser = (UUID) request.getAttribute("idUser");
-        if (idUser != idTask) {
+        var task = this.taskRepository.findById(idTask).orElse(null);
+
+        if (task.getIdUser() != idTask) {
             responseStatusCode();
             return null;
         }
 
-        var task = this.taskRepository.findById(idTask).orElse(null);
         Utils.copyNonNullProperties(taskModel, task); // if not pass a properies, keeps date already in database
 
         return this.taskRepository.save(task);
     }
+
+
 }
