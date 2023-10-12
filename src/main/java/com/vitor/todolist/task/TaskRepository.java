@@ -4,6 +4,6 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ITaskRepository extends JpaRepository<Task, UUID>{
+public interface TaskRepository extends JpaRepository<TaskModel, UUID>{
     
 }

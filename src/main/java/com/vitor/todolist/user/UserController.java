@@ -15,7 +15,7 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 public class UserController {
 
     @Autowired // tell to spring manage
-    private IUserRepository userRepository;
+    private UserRepository userRepository;
 
     // Constructor
     public UserController() {
@@ -24,7 +24,7 @@ public class UserController {
     // Methods
     @PostMapping("/")
     // ResponseEntity to return http status codes, erros, etc
-    public ResponseEntity create(@RequestBody User user) { // @RequestBody tell to spring date will be at body mensage
+    public ResponseEntity create(@RequestBody UserModel user) { // @RequestBody tell to spring date will be at body mensage
         var userName = this.userRepository.findByUsername(user.getUsername());
 
         if (userName != null) {

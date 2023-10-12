@@ -13,7 +13,7 @@ import lombok.Data;
 
 @Data // add getters and setters 
 @Entity(name = "tb_users")
-public class User {
+public class UserModel {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -29,10 +29,10 @@ public class User {
     private LocalDateTime createdAt;
 
     // Constructors
-    public User() {
+    public UserModel() {
     }
 
-    public User(String username, String name, String password) {
+    public UserModel(String username, String name, String password) {
         this.username = username;
         this.name = name;
         this.password = password;
