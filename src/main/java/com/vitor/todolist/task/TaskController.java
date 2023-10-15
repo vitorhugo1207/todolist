@@ -26,10 +26,6 @@ public class TaskController {
     @Autowired
     private TaskRepository taskRepository;
 
-    public ResponseEntity responseStatusCode() {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You don't have this task");
-    }
-
     @PostMapping("/")
     /*
      * Receve in HttpServletRequest request userID
@@ -72,19 +68,25 @@ public class TaskController {
      * And @PutMapping("/{idTask}")
     */
     @PutMapping("/{idTask}") // Receve the path, must be de same in @PathVariable UUID idTask
-    public TaskModel update(@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID idTask) {
+    public ResponseEntity update(@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID idTask) {
 
         var task = this.taskRepository.findById(idTask).orElse(null);
+
+        if (task == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Task not found");
+        }
+        
         var idUser = (UUID) request.getAttribute("idUser");
 
-        // if (task.getIdUser() != idUser) {
-        //     responseStatusCode();
-        //     return null;
-        // }
+        if (!task.getIdUser().equals(idUser)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You don't have this task");
+        }
 
-        Utils.copyNonNullProperties(taskModel, task); // if not pass a properies, keeps date already in database
 
-        return this.taskRepository.save(task);
+        Utils.copyNonNullProperties(taskModel, task); // if not pass a properies, keeps date that ready in database
+
+        var taskUpdated = this.taskRepository.save(task);
+        return ResponseEntity.ok().body(taskUpdated);
     }
 
     // public ResponseEntity delete(@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID idTask) {

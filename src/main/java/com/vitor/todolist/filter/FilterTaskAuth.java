@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component // tell to spring manage this class
 /*
- * Filter if user is login
+ * Filter if user is loged
  */
 public class FilterTaskAuth extends OncePerRequestFilter {
 
