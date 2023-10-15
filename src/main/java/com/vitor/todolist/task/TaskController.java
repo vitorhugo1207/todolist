@@ -34,22 +34,22 @@ public class TaskController {
         taskModel.setIdUser((UUID) request.getAttribute("idUser"));
 
         // Verify tittle length
-        if (taskModel.getTitle().length() > 50) {
-            System.out.println("Tittle larger than 50 characters");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tittle larger than 50 characters");
-        }
+        // if (taskModel.getTitle().length() > 50) {
+        //     System.out.println("Tittle larger than 50 characters");
+        //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tittle larger than 50 characters");
+        // }
 
         // Verify task start date with current date 
         var currentDate = LocalDateTime.now();
         if (currentDate.isAfter(taskModel.getStartAt()) || currentDate.isAfter(taskModel.getEndAt())) { // if actual data if bigger than Start Data or if actual data if bigger than Before Data 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The start date / end date must be major than current date");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("The start date / end date must be major than current date");
         }
 
         // Verify task end date is bigger than task start date
         if (taskModel.getEndAt().isBefore(taskModel.getStartAt())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The end date must be major than start date");
         }
-
         var task = this.taskRepository.save(taskModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(task);
     }
@@ -75,7 +75,7 @@ public class TaskController {
         if (task == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Task not found");
         }
-        
+
         var idUser = (UUID) request.getAttribute("idUser");
 
         if (!task.getIdUser().equals(idUser)) {
